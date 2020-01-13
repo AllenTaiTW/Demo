@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="百度地图,百度地图API，百度地图自定义工具，百度地图所见即所得工具" />
+    <meta name="description" content="百度地图API自定义地图，帮助用户在可视化操作下生成百度地图" />
+    <title>百度地图API自定义地图</title>
+    <!--引用百度地图API-->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=D5sxG6mkAbpjNIXl3a0cg7IyrjAkZgBV"></script>
+  </head>
+  
+  <body>
+    <!--百度地图容器-->
+    <div style="width:1920px;height:1080px;border:#ccc solid 1px;font-size:12px" id="map"></div>
+    </p>
+  </body>
+  <script type="text/javascript">
+    //创建和初始化地图函数：
+    function initMap(){
+      createMap();//创建地图
+      setMapEvent();//设置地图事件
+      addMapControl();//向地图添加控件
+      addMapOverlay();//向地图添加覆盖物
+    }
+    function createMap(){ 
+      map = new BMap.Map("map"); 
+      map.centerAndZoom(new BMap.Point(121.457849,31.242241),12);
+    }
+    function setMapEvent(){
+      map.enableScrollWheelZoom();
+      map.enableKeyboard();
+      map.enableDragging();
+      map.enableDoubleClickZoom()
+    }
+    function addClickHandler(target,window){
+      target.addEventListener("click",function(){
+        target.openInfoWindow(window);
+      });
+    }
+    function addMapOverlay(){
+      var markers = [
+        {content:"在建",title:"中山公园项目",imageOffset: {width:0,height:-21},position:{lat:31.22847,lng:121.428061}},
+        {content:"未实施",title:"华侨城项目",imageOffset: {width:-92,height:-21},position:{lat:31.248231,lng:121.449476}},
+        {content:"在建",title:"恒隆项目",imageOffset: {width:0,height:-21},position:{lat:31.235016,lng:121.458388}},
+        {content:"在建",title:"卢湾项目",imageOffset: {width:0,height:-21},position:{lat:31.246841,lng:121.447823}},
+        {content:"竣工",title:"江宁路项目",imageOffset: {width:-115,height:-21},position:{lat:31.250762,lng:121.450878}},
+        {content:"在建",title:"汽车站项目",imageOffset: {width:0,height:-21},position:{lat:31.194621,lng:121.428528}},
+        {content:"报警",title:"宾馆项目",imageOffset: {width:-46,height:-21},position:{lat:31.208458,lng:121.385697}},
+        {content:"在建",title:"理工大学项目",imageOffset: {width:0,height:-21},position:{lat:31.279098,lng:121.330792}},
+        {content:"整改",title:"桃浦项目",imageOffset: {width:-69,height:-21},position:{lat:31.305636,lng:121.395614}},
+        {content:"整改",title:"共和立交项目",imageOffset: {width:-69,height:-21},position:{lat:31.234275,lng:121.460292}},
+        {content:"在建",title:"天里项目",imageOffset: {width:0,height:-21},position:{lat:31.224075,lng:121.430292}},
+        {content:"在建",title:"嘉园项目",imageOffset: {width:0,height:-21},position:{lat:31.314275,lng:121.420292}},
+        {content:"未实施",title:"余家泾项目",imageOffset: {width:-92,height:-21},position:{lat:31.274275,lng:121.45292}},
+        {content:"未实施",title:"丁香项目",imageOffset: {width:-92,height:-21},position:{lat:31.674275,lng:121.49252}},
+        {content:"在建",title:"硅湖项目",imageOffset: {width:0,height:-21},position:{lat:31.074275,lng:121.25292}},
+        {content:"在建",title:"武宁项目",imageOffset: {width:0,height:-21},position:{lat:31.120075,lng:121.40092}},
+        {content:"在建",title:"苏州河项目",imageOffset: {width:0,height:-21},position:{lat:31.234275,lng:121.41292}},
+        {content:"在建",title:"职业技术学院项目",imageOffset: {width:0,height:-21},position:{lat:31.774275,lng:121.25292}},
+        {content:"未实施",title:"安亭项目",imageOffset: {width:-92,height:-21},position:{lat:31.374275,lng:121.35232}},
+
+      ];
+      for(var index = 0; index < markers.length; index++ ){
+        var point = new BMap.Point(markers[index].position.lng,markers[index].position.lat);
+        var marker = new BMap.Marker(point,{icon:new BMap.Icon("http://api.map.baidu.com/lbsapi/createmap/images/icon.png",new BMap.Size(20,25),{
+          imageOffset: new BMap.Size(markers[index].imageOffset.width,markers[index].imageOffset.height)
+        })});
+        var label = new BMap.Label(markers[index].title,{offset: new BMap.Size(25,5)});
+        var opts = {
+          width: 200,
+          title: markers[index].title,
+          enableMessage: false
+        };
+        var infoWindow = new BMap.InfoWindow(markers[index].content,opts);
+        marker.setLabel(label);
+        addClickHandler(marker,infoWindow);
+        map.addOverlay(marker);
+      };
+    }
+    //向地图添加控件
+    function addMapControl(){
+      var scaleControl = new BMap.ScaleControl({anchor:BMAP_ANCHOR_TOP_RIGHT});
+      scaleControl.setUnit(BMAP_UNIT_IMPERIAL);
+      map.addControl(scaleControl);
+      var navControl = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:3});
+      map.addControl(navControl);
+      var overviewControl = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:false});
+      map.addControl(overviewControl);
+    }
+    var map;
+      initMap();
+  </script>
+</html>
